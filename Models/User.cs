@@ -8,8 +8,9 @@ namespace TurisLocAPI.API.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Name { get; set; }
-        [MaxLength(60)]
-        public string Password { get; set; }
+        [MaxLength(30)]
+        public string userName { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }

@@ -9,21 +9,22 @@ namespace TurisLocAPI.API.Data
 
         public DbSet<User> Users { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<User>().HasData(new User
-            {
-                Id=2,
-                Name="bryan",
-                Password="123"
+//Data that will be loaded when we generate the db update
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     modelBuilder.Entity<User>().HasData(new User
+        //     {
+        //         Id=2,
+        //         Name="bryan",
+        //         Password="123"
  
-            }, new User
-            {
-                Id=1,
-                Name="bryan",
-                Password="123"
-            });
-        }
+        //     }, new User
+        //     {
+        //         Id=1,
+        //         Name="bryan",
+        //         Password="123"
+        //     });
+        // }
         
     }
 }
