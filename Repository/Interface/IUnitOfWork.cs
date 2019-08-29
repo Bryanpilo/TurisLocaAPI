@@ -6,6 +6,7 @@ namespace TurisLocAPI.API.Repository.Interface
     {
 
         void Save();
+        IUserRepository userRepository {get;}
          
     }
 }

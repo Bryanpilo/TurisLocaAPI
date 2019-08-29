@@ -9,15 +9,26 @@ namespace TurisLocAPI.API.Repository.Implementation
         public UserRepository(DataContext context) : base(context)
         {
         }
+        // private readonly DataContext _context;
+        // public UserRepository(DataContext context)
+        // {
+        //     // this.context = context;
+        //     _context = context;
+        // }
 
-        public Task<User> Login(string username, string password)
-        {
-            throw new System.NotImplementedException();
-        }
+        // public Task<User> Login(string username, string password)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
 
-        public Task<User> Register(User user, string password)
+        // public Task<User> Register(User user, string password)
+        // {
+        //     throw new System.NotImplementedException();
+        // }
+
+        public DataContext DataContext
         {
-            throw new System.NotImplementedException();
+            get { return DataContext as DataContext; }
         }
     }
 }
