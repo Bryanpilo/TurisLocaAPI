@@ -10,13 +10,10 @@ namespace TurisLocAPI.API.Repository.Implementation
         private readonly DataContext _context;
         public UnitOfWork(DataContext context)
         {
-            this._context = context;
-            userRepository= new UserRepository(_context);
+            _context = context;
         }
 
         private bool disposed = false;
-
-        public IUserRepository userRepository {get; private set; }
 
         protected virtual void Dispose(bool disposing)
         {

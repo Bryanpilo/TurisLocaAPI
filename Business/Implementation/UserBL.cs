@@ -19,8 +19,10 @@ namespace TurisLocAPI.API.Business.Implementation
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
-        public UserBL(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
+        private readonly IUserRepository _userRepository;
+        public UserBL(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration, IUserRepository userRepository)
         {
+            _userRepository = userRepository;
             _configuration = configuration;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -28,7 +30,7 @@ namespace TurisLocAPI.API.Business.Implementation
         }
         public UserDTO Login(UserLoginDTO userLoginDTO)
         {
-            var user = _unitOfWork.userRepository.GetSingle(x => x.userName == userLoginDTO.username.ToLower());
+            var user = _userRepository.GetSingle(x => x.userName == userLoginDTO.username.ToLower());
 
             if (user == null)
             {
@@ -47,21 +49,22 @@ namespace TurisLocAPI.API.Business.Implementation
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
-            var creds= new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
-            var TokenDescriptor= new SecurityTokenDescriptor{
-                Subject= new ClaimsIdentity(claims),
-                Expires= DateTime.Now.AddDays(1),
-                SigningCredentials= creds
+            var TokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(1),
+                SigningCredentials = creds
             };
 
-            var tokenHandler= new JwtSecurityTokenHandler();
+            var tokenHandler = new JwtSecurityTokenHandler();
 
-            var token= tokenHandler.CreateToken(TokenDescriptor);
+            var token = tokenHandler.CreateToken(TokenDescriptor);
 
-            UserDTO userDTO= _mapper.Map<UserDTO>(user);;
+            UserDTO userDTO = _mapper.Map<UserDTO>(user); ;
 
-            userDTO.Token= tokenHandler.WriteToken(token);
+            userDTO.Token = tokenHandler.WriteToken(token);
             // var va= _mapper.Map<IEnumerable<UserDTO>>(List);
             return userDTO;
 
@@ -90,7 +93,7 @@ namespace TurisLocAPI.API.Business.Implementation
 
             userRegisterDTO.username = userRegisterDTO.username.ToLower();
 
-            if (_unitOfWork.userRepository.Exist(x => x.userName == userRegisterDTO.username))
+            if (_userRepository.Exist(x => x.userName == userRegisterDTO.username))
             {
                 return false;
             }
@@ -105,7 +108,7 @@ namespace TurisLocAPI.API.Business.Implementation
                 userName = userRegisterDTO.username
             };
 
-            _unitOfWork.userRepository.Add(user);
+            _userRepository.Add(user);
 
             _unitOfWork.Save();
 

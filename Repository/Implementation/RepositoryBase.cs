@@ -11,7 +11,7 @@ namespace TurisLocAPI.API.Repository.Implementation
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
-        private readonly DataContext _context;
+        protected readonly DataContext _context;
 
         public RepositoryBase(DataContext context)
         {

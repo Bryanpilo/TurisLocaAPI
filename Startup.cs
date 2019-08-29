@@ -43,13 +43,10 @@ namespace TurisLocAPI.API
             services.AddDbContext<DataContext>(opts => opts.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
+
+            //  services.AddAutoMapper(typeof(UserBL).Assembly);
             
-            services.AddAutoMapper(typeof(UserBL).Assembly);
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            // services.AddScoped<IUserRepository, UserRepository>();
-
-            services.AddScoped<IFacade, Facade>();
+            ConfigureServiceInstances(services);
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(Options=>{
@@ -61,6 +58,17 @@ namespace TurisLocAPI.API
                         ValidateAudience= false
                     };
                 });
+            
+        }
+
+
+        public void ConfigureServiceInstances(IServiceCollection services)
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            // services.AddScoped<IFacade, Facade>();
+            services.AddScoped<IUserBL, UserBL>();
             
         }
 

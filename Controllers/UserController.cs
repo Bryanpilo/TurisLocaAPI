@@ -10,16 +10,16 @@ namespace TurisLocAPI.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IFacade _facade;
-        public UserController(IFacade facade)
+        private readonly IUserBL _userBL;
+        public UserController(IUserBL userBL)
         {
-            _facade = facade;
+            _userBL = userBL;
         }
 
         [HttpPost("login")]
         public IActionResult Login(UserLoginDTO userLoginDTO)
         {
-            var values = _facade.userBL.Login(userLoginDTO);
+            var values = _userBL.Login(userLoginDTO);
 
             if(values==null)
                 return Unauthorized();
@@ -31,7 +31,7 @@ namespace TurisLocAPI.API.Controllers
         [HttpPost("register")]
         public IActionResult Register(UserRegisterDTO userRegisterDTO)
         {
-            var user= _facade.userBL.Register(userRegisterDTO);
+            var user= _userBL.Register(userRegisterDTO);
 
             if(!user){
                return StatusCode(409);
