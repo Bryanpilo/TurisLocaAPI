@@ -3,7 +3,7 @@ using TurisLocAPI.API.Business.Interface;
 
 namespace TurisLocAPI.API.Repository.Interface
 {
-    public interface IUnitOfBL
+    public interface IFacade
     {
 
         IUserBL userBL {get;}

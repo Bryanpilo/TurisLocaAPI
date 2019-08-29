@@ -10,28 +10,28 @@ namespace TurisLocAPI.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUnitOfBL _unitOfBL;
-        public UserController(IUnitOfBL unitOfBL)
+        private readonly IFacade _facade;
+        public UserController(IFacade facade)
         {
-            _unitOfBL = unitOfBL;
+            _facade = facade;
         }
 
         [HttpPost("login")]
         public IActionResult Login(UserLoginDTO userLoginDTO)
         {
-            var values = _unitOfBL.userBL.Login(userLoginDTO);
+            var values = _facade.userBL.Login(userLoginDTO);
 
             if(values==null)
                 return Unauthorized();
 
-                
+
             return Ok(values);
         }
 
         [HttpPost("register")]
         public IActionResult Register(UserRegisterDTO userRegisterDTO)
         {
-            var user= _unitOfBL.userBL.Register(userRegisterDTO);
+            var user= _facade.userBL.Register(userRegisterDTO);
 
             if(!user){
                return StatusCode(409);

@@ -49,7 +49,7 @@ namespace TurisLocAPI.API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             // services.AddScoped<IUserRepository, UserRepository>();
 
-            services.AddScoped<IUnitOfBL, UnitOfBL>();
+            services.AddScoped<IFacade, Facade>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(Options=>{

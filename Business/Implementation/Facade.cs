@@ -7,10 +7,10 @@ using TurisLocAPI.API.Repository.Interface;
 
 namespace TurisLocAPI.API.Repository.Implementation
 {
-    public class UnitOfBL : IUnitOfBL
+    public class Facade : IFacade
     {
 
-        public UnitOfBL(IUserBL _user)
+        public Facade(IUserBL _user)
         {
             userBL= _user;
         }
