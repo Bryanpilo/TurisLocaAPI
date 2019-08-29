@@ -5,10 +5,14 @@
 # .NET Core build folders
 /bin
 /obj
+appsettings.json
+/.vs
+/.vscode
 
 # Common node modules locations
 /node_modules
 /wwwroot/node_modules
+/wwwroot
 
 
 # End of https://www.gitignore.io/api/dotnetcore

@@ -5,6 +5,7 @@ namespace TurisLocAPI.API.Repository.Interface
 {
     public interface IUnitOfBL
     {
+
         IUserBL userBL {get;}
          
     }
