@@ -5,6 +5,6 @@ namespace TurisLocAPI.API.Business.Interface
     public interface IUserBL
     {
         bool Register(UserRegisterDTO userRegisterDTO);
-        UserDTO Login(string username, string password);
+        UserDTO Login(UserLoginDTO userLoginDTO);
     }
 }

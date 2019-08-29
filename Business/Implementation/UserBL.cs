@@ -1,5 +1,10 @@
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using TurisLocAPI.API.Business.Interface;
 using TurisLocAPI.API.DTO.User;
 using TurisLocAPI.API.Models;
@@ -13,28 +18,52 @@ namespace TurisLocAPI.API.Business.Implementation
         // private readonly IUserRepository _userRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public UserBL(IUnitOfWork unitOfWork, IMapper mapper)
+        private readonly IConfiguration _configuration;
+        public UserBL(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration configuration)
         {
+            _configuration = configuration;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
 
         }
-        public UserDTO Login(string username, string password)
+        public UserDTO Login(UserLoginDTO userLoginDTO)
         {
-            var user = _unitOfWork.userRepository.GetSingle(x => x.userName == username);
+            var user = _unitOfWork.userRepository.GetSingle(x => x.userName == userLoginDTO.username.ToLower());
 
             if (user == null)
             {
                 return null;
             }
 
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if (!VerifyPasswordHash(userLoginDTO.password, user.PasswordHash, user.PasswordSalt))
             {
                 return null;
             }
 
+            var claims = new[]{
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.userName)
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+
+            var creds= new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var TokenDescriptor= new SecurityTokenDescriptor{
+                Subject= new ClaimsIdentity(claims),
+                Expires= DateTime.Now.AddDays(1),
+                SigningCredentials= creds
+            };
+
+            var tokenHandler= new JwtSecurityTokenHandler();
+
+            var token= tokenHandler.CreateToken(TokenDescriptor);
+
+            UserDTO userDTO= _mapper.Map<UserDTO>(user);;
+
+            userDTO.Token= tokenHandler.WriteToken(token);
             // var va= _mapper.Map<IEnumerable<UserDTO>>(List);
-            return _mapper.Map<UserDTO>(user);
+            return userDTO;
 
         }
 

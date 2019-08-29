@@ -12,6 +12,7 @@ namespace TurisLocAPI.API.AutoMapper
             .ForMember(m => m.UserName,
                         vm => vm.MapFrom(
                             v => v.userName))
+            .ForMember(m => m.Token, opt => opt.Ignore())
             .ReverseMap();
 
         }

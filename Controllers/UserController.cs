@@ -16,10 +16,15 @@ namespace TurisLocAPI.API.Controllers
             _unitOfBL = unitOfBL;
         }
 
-        [HttpGet("{username}/{password}")]
-        public IActionResult Login(string username, string password)
+        [HttpPost("login")]
+        public IActionResult Login(UserLoginDTO userLoginDTO)
         {
-            var values = _unitOfBL.userBL.Login(username, password);
+            var values = _unitOfBL.userBL.Login(userLoginDTO);
+
+            if(values==null)
+                return Unauthorized();
+
+                
             return Ok(values);
         }
 
